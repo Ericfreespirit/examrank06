@@ -11,7 +11,8 @@
 
 
 int main(){
-    int sockfd;
+    int sockfd ,csock;
+    int id = 0;
     struct sockaddr_in myaddr;
     socklen_t len;
 
@@ -47,12 +48,20 @@ int main(){
     }
     else
         printf("listening on [%s:%d] ...\n", IP, PORT);
-    len = sizeof(myaddr);
-    if (accept(sockfd, (struct sockaddr *)&myaddr, &len) < 0){
-        perror("connection server failed. Error");
-        exit(1);
-    }
-    else
-        printf("client xxx connect\n");
+        len = sizeof(myaddr);
+        if ((csock = accept(sockfd, (struct sockaddr *)&myaddr, &len)) < 0){
+            perror("connection server failed. Error");
+            exit(1);
+        }
+        else{
+            printf("client %d: [%s:%d]\n", 
+            id, inet_ntoa(myaddr.sin_addr), ntohs(myaddr.sin_port));
+        }
+        
+        if (send(csock, "You are client 0\n", 20, 0) < 0){
+            perror("send failed. Error");
+            exit(1);
+        }
+
     return (0);
 }

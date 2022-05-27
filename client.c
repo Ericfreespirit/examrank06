@@ -17,6 +17,7 @@ int main(){
 
 */
     int sockfd;
+    char buff[32];
     struct sockaddr_in myaddr;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -35,8 +36,12 @@ int main(){
         perror("connexion failed. Error");
         exit (1);
     }
-    else 
-        printf ("client connection done" );
-
+    if (recv(sockfd, buff, 32,0) < 0){
+        perror("recv failed. Error");
+        exit(1);
+    }
+    else
+        printf("%s",buff);
+    
     return (0);
 }
